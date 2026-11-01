@@ -43,13 +43,12 @@ tests/          unit and security rules tests
 ```
 
 ## Deploying
-The site is hosted on Firebase Hosting. See `docs/DEPLOYMENT.md`. In short:
+The site is hosted on Firebase Hosting. In short:
 ```bash
 npx firebase-tools login
 npx firebase-tools use <project-id>
 npm run deploy
 ```
-The professor's guide is in `docs/HANDOVER.md`.
 
 ## Security
 Access is limited to the accounts listed in the `owner/config` Firestore document. The rules in `firestore.rules` enforce this for every read and write.
