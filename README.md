@@ -10,7 +10,6 @@ A private web app for creating Japanese vocabulary flashcards with images, organ
 ## Getting started
 ```bash
 npm install
-cp .env.example .env
 npm run dev
 ```
 Fill in `.env` with your Firebase web app values and set up Firebase by following `docs/SETUP_FIREBASE.md`.
