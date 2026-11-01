@@ -1,6 +1,7 @@
 # Kotoba Studio
 
 A private web app for creating Japanese vocabulary flashcards with images, organising them into chapters, and presenting them on a classroom screen.
+Web App Link: https://japanese-flashcards-cc49f.web.app/
 
 ## Stack
 - React, Vite, Tailwind CSS
