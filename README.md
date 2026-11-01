@@ -42,6 +42,28 @@ public/         manifest, icons, service worker
 tests/          unit and security rules tests
 ```
 
+
+## Screenshots
+
+### Login Page
+![Login Page](login.png)
+
+### Dashboard
+![Dashboard](dashboard.png)
+
+### Chapter
+![Chapter](chapter.png)
+
+### Chapter 2
+![Chapter 2](chapter-2.png)
+
+### Vocabulary
+![Vocabulary](vocabulary.png)
+
+### Flashcards
+![Flashcards](flashcards.png)
+
+
 ## Deploying
 The site is hosted on Firebase Hosting. In short:
 ```bash
