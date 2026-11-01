@@ -1,0 +1,88 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isOwner() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/owner/config)
+        && request.auth.uid in get(/databases/$(database)/documents/owner/config).data.uids;
+    }
+
+    function reqString(d, k, max) {
+      return k in d && d[k] is string && d[k].size() >= 1 && d[k].size() <= max;
+    }
+    function optString(d, k, max) {
+      return !(k in d) || d[k] == null || (d[k] is string && d[k].size() <= max);
+    }
+
+    match /owner/config {
+      allow get: if signedIn() && resource != null && request.auth.uid in resource.data.uids;
+      allow list, create, update, delete: if false;
+    }
+
+    match /chapters/{chapterId} {
+      function validChapter() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['title', 'description', 'createdAt', 'updatedAt'])
+          && reqString(d, 'title', 120)
+          && optString(d, 'description', 2000);
+      }
+      allow read, delete: if isOwner();
+      allow create, update: if isOwner() && validChapter();
+    }
+
+    match /vocabulary/{wordId} {
+      function validWord() {
+        let d = request.resource.data;
+        return d.keys().hasOnly([
+            'chapterId', 'japanese', 'hiragana', 'katakana', 'romaji', 'english',
+            'hasImage', 'exampleSentence', 'sentenceTranslation',
+            'displayOrder', 'createdAt', 'updatedAt'
+          ])
+          && reqString(d, 'chapterId', 64)
+          && reqString(d, 'japanese', 200)
+          && reqString(d, 'english', 300)
+          && optString(d, 'hiragana', 200)
+          && optString(d, 'katakana', 200)
+          && optString(d, 'romaji', 200)
+          && optString(d, 'exampleSentence', 1000)
+          && optString(d, 'sentenceTranslation', 1000)
+          && 'displayOrder' in d && d.displayOrder is int
+          && (!('hasImage' in d) || d.hasImage is bool)
+          && exists(/databases/$(database)/documents/chapters/$(d.chapterId));
+      }
+      allow read, delete: if isOwner();
+      allow create, update: if isOwner() && validWord();
+    }
+
+    match /images/{wordId} {
+      function validImage() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['data', 'contentType', 'width', 'height', 'updatedAt'])
+          && d.data is bytes
+          && d.data.size() > 0 && d.data.size() <= 900000
+          && d.contentType in ['image/webp', 'image/jpeg', 'image/png']
+          && d.width is int && d.height is int;
+      }
+      allow read, delete: if isOwner();
+      allow create, update: if isOwner() && validImage();
+    }
+
+    match /thumbs/{wordId} {
+      function validThumb() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['data', 'contentType', 'width', 'height', 'updatedAt'])
+          && d.data is bytes
+          && d.data.size() > 0 && d.data.size() <= 60000
+          && d.contentType in ['image/webp', 'image/jpeg', 'image/png']
+          && d.width is int && d.height is int;
+      }
+      allow read, delete: if isOwner();
+      allow create, update: if isOwner() && validThumb();
+    }
+
+  }
+}

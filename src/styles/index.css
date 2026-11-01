@@ -1,0 +1,38 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/noto-sans-jp/400.css';
+@import '@fontsource/noto-sans-jp/500.css';
+@import '@fontsource/noto-sans-jp/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+    line-height: 1.55;
+  }
+  :lang(ja), .jp { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+  h1, h2, h3 { @apply tracking-tight; }
+  :focus-visible {
+    outline: 2px solid #B84A3A;
+    outline-offset: 2px;
+  }
+  ::selection { background: #F0D5CF; }
+}
+
+@layer utilities {
+  .text-page-title { font-size: clamp(1.75rem, 1.4rem + 1vw, 2.125rem); line-height: 1.2; font-weight: 600; }
+  .text-section-title { font-size: 1.25rem; line-height: 1.3; font-weight: 600; }
+  .text-helper { font-size: 0.8125rem; line-height: 1.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
