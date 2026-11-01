@@ -54,7 +54,7 @@ tests/          unit and security rules tests
 ### Chapter
 ![Chapter](chapter.png)
 
-### Chapter 2
+### Chapter after opening
 ![Chapter 2](chapter-2.png)
 
 ### Vocabulary
